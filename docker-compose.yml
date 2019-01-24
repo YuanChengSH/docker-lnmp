@@ -1,0 +1,33 @@
+version: '3'
+services:
+    mysql56:
+        container_name: mysql56
+        build:
+            context: ./mysql56
+        ports:
+            - '3306:3306'
+        environment:
+            - MYSQL_ROOT_PASSWORD=123456
+
+    php71:
+        container_name: php71
+        build:
+            context: ./php71
+        volumes:
+            - ~/code:/var/www/html
+        ports:
+            - '9000:9000'
+        depends_on:
+            - mysql56
+
+    nginx:
+        container_name: nginx
+        build:
+            context: ./nginx
+        volumes:
+            - ~/code:/var/www/html
+        ports:
+            - '80:80'
+            - '443:443'
+        depends_on:
+            - php71
